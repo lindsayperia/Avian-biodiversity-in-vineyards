@@ -8,8 +8,8 @@ library(datawizard)
 
 ########################################
 ### calculating functional diversity ###
-community <- read_csv("2_Spreadsheets/community-mix.csv")
-trait.x <- readRDS("2_Spreadsheets/Traits.rds")
+community <- read_csv("Data/community-mix.csv")
+trait.x <- readRDS("Data/Traits.rds")
 
 ## making community dataset just abundances (-point)
 abund <- data.frame(community[,-1])
@@ -26,7 +26,7 @@ FD$dis <- fd$FDis
 FD$ric <- fd$FRic
 
 # merging site variables with functional diversity
-site.vars <- readRDS("2_Spreadsheets/EnvironmentalVars.rds")
+site.vars <- readRDS("Data/EnvironmentalVars.rds")
 
 FD.vars <- merge(FD, site.vars, by = "point")
 
@@ -53,7 +53,7 @@ model.nat <- lm(eve.re ~ grassland +shrubland, FD.vars)
 AIC(model.nat) # 293.0
 summary(model.nat) # 
 
-model.eve <- lm(eve.re ~ canopy +stream +vineyard, FD.vars)
+model.eve <- lm(eve.re ~ poly(canopy,2) +stream +vineyard, FD.vars)
 AIC(model.eve) # 282.5 AIC
 summary(model.eve)
 check_model(model.eve)

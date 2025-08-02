@@ -4,7 +4,7 @@ library(MuMIn)
 library(tidyverse)
 
 # OBSERVATION COVARIATES
-obs <- read_csv("2_Spreadsheets/ObsVars.csv")
+obs <- read_csv("Data/ObsVars.csv")
 obs <- obs[, -c(1,2)]
 obs <- obs[order(obs$point, decreasing = F),]
 
@@ -57,7 +57,7 @@ ObsCovsCcal <- data.frame(cloud3, temp3, sound3, doy3, time3)
 
 # SITE COVARIATES
 
-CcalData <- readRDS("2_Spreadsheets/EnvironmentalVars.rds")
+CcalData <- readRDS("Data/EnvironmentalVars.rds")
 
 siteCovsCcal <- CcalData[order(CcalData$point, decreasing = F),]
 siteCovsCcal <- siteCovsCcal[,-1]
@@ -66,7 +66,7 @@ siteCovsCcal <- siteCovsCcal[,-1]
 ### SONG SPARROW ###
 
 # unmarked data frame for model
-sosp <- read_csv("2_Spreadsheets/Species detection/SOSP100.csv")
+sosp <- read_csv("Data/Species detection/SOSP100.csv")
 CcalDataYSOSP <- as.matrix(sosp[,2:7])
 umfSOSP <- unmarkedFrameOccu(y = CcalDataYSOSP, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -91,40 +91,10 @@ gof.finSOSP <- mb.gof.test(finSOSP, nsim = 1000,plot.hist = TRUE)
 summary(finSOSP) # AIC 187.0
 
 
-####################
-### OAK TITMOUSE ### 
-
-# unmarked data frame for model
-oati <- read_csv("2_Spreadsheets/Species detection/OATI100.csv")
-CcalDataYOATI <- as.matrix(oati[,2:7])
-umfOATI <- unmarkedFrameOccu(y = CcalDataYOATI, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
-# agricultural land cover model
-agOATI <- occu(~ doy3 +time3 +sound3~ +vineyard +developed+rowcrop +orchard + all.dB, umfOATI)
-mb.gof.test(agOATI, nsim = 1000,plot.hist = TRUE)
-summary(agOATI) #AIC 125.0
-
-# natural land cover model
-natOATI <- occu(~ doy3 +time3 +sound3~ +shrubland +grassland, umfOATI)
-mb.gof.test(natOATI, nsim = 1000,plot.hist = TRUE) 
-summary(natOATI) # AIC 121.3
-
-# structural model
-strOATI <- occu(~doy3 +time3 +sound3~ canopySD +canopy +stream, umfOATI)
-gof.strOATI <- mb.gof.test(strOATI, nsim = 1000,plot.hist = TRUE)
-summary(strOATI) #AIC 124.0
-
-#final model
-finOATI <- occu(~doy3 + time3 +sound3 ~ developed +rowcrop, umfOATI)
-mb.gof.test(finOATI, nsim = 1000, plot.hist = T)
-summary(finOATI) #AIC 121.8
-
-##models are overdispersed
-
-
 ########################
 ### LESSER GOLDFINCH ###
 
-lego <- read_csv("2_Spreadsheets/Species detection/LEGO100.csv")
+lego <- read_csv("Data/Species detection/LEGO100.csv")
 CcalDataYlego <- as.matrix(lego[,2:7])
 umfLEGO <- unmarkedFrameOccu(y = CcalDataYlego, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -152,40 +122,11 @@ mb.gof.test(finLEGO, nsim = 1000,plot.hist = TRUE)
 summary(finLEGO) #AIC 204.2
 
 
-####################
-### BLACK PHOEBE ###
-
-## models don't converge ##
-
-blph <- read_csv("2_Spreadsheets/Species detection/BLPH100.csv")
-CcalDataYBLPH <- as.matrix(blph[,2:7])
-umfBLPH <- unmarkedFrameOccu(y = CcalDataYBLPH, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
-
-# agricultural land cover model
-agBLPH <- occu(~ doy3 +time3 +sound3~ +vineyard +developed +rowcrop +orchard +all.dB, umfBLPH)
-mb.gof.test(agBLPH, nsim = 1000,plot.hist = TRUE)
-summary(agBLPH) #AIC 168.1
-
-# natural land cover model
-natBLPH <- occu(~ doy3 +time3 + sound3~ shrubland +grassland, umfBLPH)
-mb.gof.test(natBLPH, nsim = 1000,plot.hist = TRUE)
-summary(natBLPH) # AIC 164.9
-
-# structural model
-strBLPH <- occu(~doy3 +time3 +sound3~ canopySD +canopy +stream, umfBLPH)
-mb.gof.test(strBLPH, nsim = 1000,plot.hist = TRUE)
-summary(strBLPH) #AIC 166.7
-
-# final model
-finBLPH <- occu(~doy3 + time3 + sound3 ~ vineyard +developed +shrubland, umfBLPH)
-mb.gof.test(finBLPH, nsim = 1000, plot.hist = T)
-summary(finBLPH) # AIC 162.9
-
 
 #########################
 ### CALIFORNIA TOWHEE ###
 
-calt <- read_csv("2_Spreadsheets/Species detection/CALT100.csv")
+calt <- read_csv("Data/Species detection/CALT100.csv")
 CcalDataYCALT <- as.matrix(calt[,2:7])
 umfCALT <- unmarkedFrameOccu(y = CcalDataYCALT, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -212,7 +153,7 @@ summary(finCALT) # AIC 227.1
 ######################
 ### AMERICAN ROBIN ###
 
-amro <- read_csv("2_Spreadsheets/Species detection/AMRO100.csv")
+amro <- read_csv("Data/Species detection/AMRO100.csv")
 CcalDataYAMRO <- as.matrix(amro[,2:7])
 umfAMRO <- unmarkedFrameOccu(y = CcalDataYAMRO, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -239,7 +180,7 @@ summary(finAMRO) # AIC 69.3
 ###############
 ### BUSHTIT ###
 
-bush <- read_csv("2_Spreadsheets/Species detection/BUSH100.csv")
+bush <- read_csv("Data/Species detection/BUSH100.csv")
 CcalDataYBUSH <- as.matrix(bush[,2:7])
 umfBUSH <- unmarkedFrameOccu(y = CcalDataYBUSH, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -268,7 +209,7 @@ summary(finBUSH) # AIC 73.7
 ###############
 ### WRENTIT ###
 
-wren <- read_csv("2_Spreadsheets/Species detection/WREN100.csv")
+wren <- read_csv("Data/Species detection/WREN100.csv")
 CcalDataYWREN <- as.matrix(wren[,2:7])
 umfWREN <- unmarkedFrameOccu(y = CcalDataYWREN, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -300,7 +241,7 @@ summary(finWREN) # AIC 81.0
 #########################
 ### EUROPEAN STARLING ###
 
-eust <- read_csv("2_Spreadsheets/Species detection/EUST100.csv")
+eust <- read_csv("Data/Species detection/EUST100.csv")
 CcalDataYEUST <- as.matrix(eust[,2:7])
 umfEUST <- unmarkedFrameOccu(y = CcalDataYEUST, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -327,7 +268,7 @@ summary(finEUST) # AIC 199.9
 #####################
 ### CLIFF SWALLOW ###
 
-clsw <- read_csv("2_Spreadsheets/Species detection/CLSW100.csv")
+clsw <- read_csv("Data/Species detection/CLSW100.csv")
 CcalDataYCLSW <- as.matrix(clsw[,2:7])
 umfCLSW <- unmarkedFrameOccu(y = CcalDataYCLSW, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -355,7 +296,7 @@ summary(finCLSW) # AIC 103.9
 ####################
 ### TREE SWALLOW ###
 
-trsw <- read_csv("2_Spreadsheets/Species detection/TRSW100.csv")
+trsw <- read_csv("Data/Species detection/TRSW100.csv")
 CcalDataYTRSW <- as.matrix(trsw[,2:7])
 umfTRSW <- unmarkedFrameOccu(y = CcalDataYTRSW, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -383,7 +324,7 @@ summary(finTRSW) # AIC 81.3
 ##########################
 ### BREWER'S BLACKBIRD ###
 
-brbl <- read_csv("2_Spreadsheets/Species detection/BRBL100.csv")
+brbl <- read_csv("Data/Species detection/BRBL100.csv")
 CcalDataYBRBL <- as.matrix(brbl[,2:7])
 umfBRBL <- unmarkedFrameOccu(y = CcalDataYBRBL, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -414,7 +355,7 @@ summary(finBRBL) # AIC 66.6
 #########################
 ### CASSIN'S KINGBIRD ###
 
-caki <- read_csv("2_Spreadsheets/Species detection/CAKI100.csv")
+caki <- read_csv("Data/Species detection/CAKI100.csv")
 CcalDataYCAKI <- as.matrix(caki[,2:7])
 umfCAKI <- unmarkedFrameOccu(y = CcalDataYCAKI, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -443,7 +384,7 @@ summary(finCAKI) # AIC 65.6
 ### CALIFORNIA SCRUB JAY ###
 
 # unmarked data frame for model
-casj <- read_csv("2_Spreadsheets/Species detection/CASJ150.csv")
+casj <- read_csv("Data/Species detection/CASJ150.csv")
 CcalDataYCASJ <- as.matrix(casj[,2:7])
 umfCASJ <- unmarkedFrameOccu(y = CcalDataYCASJ, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -471,7 +412,7 @@ summary(finCASJ) # 190.1
 ### ACORN WOODPECKER ###
 
 # unmarked data frame for model
-acwo <- read_csv("2_Spreadsheets/Species detection/ACWO150.csv")
+acwo <- read_csv("Data/Species detection/ACWO150.csv")
 CcalDataYACWO <- as.matrix(acwo[,2:7])
 umfACWO <- unmarkedFrameOccu(y = CcalDataYACWO, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -499,7 +440,7 @@ summary(finACWO) # 150.1
 ### NUTTAL'S WOODPECKER ###
 
 # unmarked data frame for model
-nuwo <- read_csv("2_Spreadsheets/Species detection/NUWO150.csv")
+nuwo <- read_csv("Data/Species detection/NUWO150.csv")
 CcalDataYNUWO <- as.matrix(nuwo[,2:7])
 umfNUWO <- unmarkedFrameOccu(y = CcalDataYNUWO, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -527,7 +468,7 @@ summary(finNUWO) # AIC 74.1
 ### RED-TAILED HAWK  ###
 
 # unmarked data frame for model
-rtha <- read_csv("2_Spreadsheets/Species detection/RTHA150.csv")
+rtha <- read_csv("Data/Species detection/RTHA150.csv")
 CcalDataYRTHA <- as.matrix(rtha[,2:7])
 umfRTHA <- unmarkedFrameOccu(y = CcalDataYRTHA, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -555,7 +496,7 @@ summary(finRTHA) # AIC 137.4
 ### RED-SHOULDERED HAWK ###
 
 # unmarked data frame for model
-rsha <- read_csv("2_Spreadsheets/Species detection/RSHA150.csv")
+rsha <- read_csv("Data/Species detection/RSHA150.csv")
 CcalDataYRSHA <- as.matrix(rsha[,2:7])
 umfRSHA <- unmarkedFrameOccu(y = CcalDataYRSHA, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -582,7 +523,7 @@ summary(finRSHA) # AIC 51.5
 #####################
 ### MOURNING DOVE ###
 # unmarked data frame for model
-modo <- read_csv("2_Spreadsheets/Species detection/MODO150.csv")
+modo <- read_csv("Data/Species detection/MODO150.csv")
 CcalDataYMODO <- as.matrix(modo[,2:7])
 umfMODO <- unmarkedFrameOccu(y = CcalDataYMODO, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -616,7 +557,7 @@ summary(finMODO) # AIC 194.7
 ### CALIFORNIA QUAIL ###
 
 # unmarked data frame for model
-caqu <- read_csv("2_Spreadsheets/Species detection/CAQU150.csv")
+caqu <- read_csv("Data/Species detection/CAQU150.csv")
 CcalDataYCAQU <- as.matrix(caqu[,2:7])
 umfCAQU <- unmarkedFrameOccu(y = CcalDataYCAQU, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -642,7 +583,7 @@ summary(finCAQU) # AIC 109.4
 
 ### EURASIAN COLLARED DOVE ###
 
-eucd <- read_csv("2_Spreadsheets/Species detection/EUCD150.csv")
+eucd <- read_csv("Data/Species detection/EUCD150.csv")
 CcalDataYEUCD <- as.matrix(eucd[,2:7])
 umfEUCD <- unmarkedFrameOccu(y = CcalDataYEUCD, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 
@@ -670,7 +611,7 @@ summary(finEUCD) # AIC 130.7
 ### AMERICAN CROW ###
 
 # unmarked data frame for model
-amcr <- read_csv("2_Spreadsheets/Species detection/AMCR150.csv")
+amcr <- read_csv("Data/Species detection/AMCR150.csv")
 CcalDataYAMCR <- as.matrix(amcr[,2:7])
 umfAMCR <- unmarkedFrameOccu(y = CcalDataYAMCR, siteCovs = siteCovsCcal, obsCovs = ObsCovsCcal)
 

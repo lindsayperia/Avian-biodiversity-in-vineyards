@@ -9,8 +9,8 @@ library(performance)
 
 ### COMMUNITY ANALYSIS  WITH HAND DIGITIZED LAND COVER ###
 
-vars <- readRDS("2_Spreadsheets/EnvironmentalVars.rds")
-comm <- read_csv("2_Spreadsheets/community-mix.csv")
+vars <- readRDS("Data/EnvironmentalVars.rds")
+comm <- read_csv("Data/community-mix.csv")
 community <- merge(comm, vars, by = "point")
 
 rarecurve(community[1:68]) 
@@ -125,7 +125,7 @@ ggplot(rich, aes(x = canopy, y = qD)) +
 
 # use rankindex to help us pick if we are using a continuous predictor
 rankindex(community$canopy,community[2:70]) ## pick the index with the highest value
-# highest value is "gower"
+  # highest value is "gower"
 
 # using gower as determined in previous step
 betaD <-vegdist(community[2:69], method = "gower")

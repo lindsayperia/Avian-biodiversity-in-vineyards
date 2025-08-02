@@ -10,7 +10,7 @@ library(lidR)
 # hand digitized land cover
 
 # area of circle with 150m radius = 70685.83 m^2
-digitized <- read_csv("2_Spreadsheets/Preliminary Data/LandCoverbyHand.csv")
+digitized <- read_csv("Data/Preliminary Data/LandCoverbyHand.csv")
 
 # create data frame with one column for each land cover type and one row for each point
 unique(digitized$CoverType)
@@ -71,7 +71,7 @@ landcover_final <- land %>%
   replace(is.na(.), 0)
 
 # read in distance to surface water rds
-surface_water <- read_rds("2_Spreadsheets/DistToWater.rds")
+surface_water <- read_rds("Data/DistToWater.rds")
 
 # LiDAR processing
 
@@ -79,7 +79,7 @@ surface_water <- read_rds("2_Spreadsheets/DistToWater.rds")
 las.cat <- readLAScatalog("4_LiDAR/files/")
 
 # loading df of points
-points <- st_read("3_shp/Final point count locations/PointCounts.shp")
+points <- st_read("Data/Final point count locations/PointCounts.shp")
 points <- points  %>%
   st_transform("+proj=utm +zone=10 +datum=WGS84 +units=m +no_defs")
 
@@ -106,7 +106,7 @@ for(i in points$Number) {
 names(lidar) <- c("point", "canopySD", "heightSD", "canopy")
 
 # AudioMoth processing
-AM <- read_csv("2_Spreadsheets/AM-CalibratedOutput/splbyfile.csv")
+AM <- read_csv("Data/splbyfile.csv")
 
 AM.mean <- AM %>%
   group_by(Folder) %>%
@@ -120,7 +120,7 @@ AM.mean$point <- 1:31
 to_merge <- list(landcover_final, surface_water, lidar, AM.mean)
 environmental.vars<- merge(to_merge, by = "point")
 
-write_rds("2_Spreadsheets/EnvironmentalVars.rds")
+write_rds("Data/EnvironmentalVars.rds")
 
 
 
